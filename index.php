@@ -1,6 +1,3 @@
-<?php 
-	require_once("function.php");
- ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,25 +14,29 @@
 			grid-auto-columns: minmax(20%, 30%);
 		}
 	</style>
+	<script>
+		$(document).ready(function(){
+			$("#hashForm").submit(function(e){
+				e.preventDefault();
+				$.post("calculate_hashes.php", {
+					input: $("#text").val()
+				}, function(response){
+					$("#hashes").html(response);
+				});
+			});
+		});
+	</script>
 	<link href="https://fonts.googleapis.com/css?family=Nunito|Orbitron" rel="stylesheet">
 </head>
 <body>
-	<form method="post">
+	<form method="get" id="hashForm">
 		<label>Input string: </label>
-		<input type="text" name="input">
+		<input type="text" name="input" id="text">
 		<input type="submit" name="submit" value="Hash!">
 	</form>
 	<br>
-	<div class="hashes">
-		<?php 
-			foreach (hash_algos() as $i => $algo) { ?>
-				<div class="hash_algo">
-					<p class="algo"><b><?= $algo; ?></b></p>
-					<p>Hash: <span style="font-family: Nunito"><?= $hashes[$i]; ?></span></p>
-                    <small>Execution time: <?= number_format($hashTime[$algo] * 1000000000, 0); ?> nanoseconds</small>
-				</div>
-		<?php	}
-		 ?>
+	<div class="hashes" id="hashes">
+
 	</div>
 </body>
 </html>
